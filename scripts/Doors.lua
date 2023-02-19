@@ -538,6 +538,12 @@ local CreditsTab = Window:MakeTab({
 })
 
 CreditsTab:AddParagraph("Credits to","nikos")
+CreditsTab:AddButton({
+	Name = "Destroy UI",
+	Callback = function()
+        	OrionLib:Destroy()
+  	end    
+})
 
 coroutine.resume(NotificationCoroutine)
 
