@@ -548,8 +548,6 @@ CreditsTab:AddButton({
 coroutine.resume(NotificationCoroutine)
 
 OrionLib:Init()
-
-task.wait(2)
 --// ok actual code ends here
 
 CreditsTab:AddParagraph("Credits to","nikos")
