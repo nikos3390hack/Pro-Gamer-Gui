@@ -355,7 +355,7 @@ GameTab:AddToggle({
     Save = true
 })
 GameTab:AddToggle({
-	Name = "Notify when mob spawns",
+	Name = "Entity Notification",
 	Default = false,
     Flag = "MobToggle" ,
     Save = true
