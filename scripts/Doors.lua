@@ -56,7 +56,7 @@ local newindex;newindex = hookmetamethod(game,"__newindex",function(self,key,new
 end)
 
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
-local Window = OrionLib:MakeWindow({IntroText = "ProGamerGui",Name = "ProGamerGui - Doors", HidePremium = false, SaveConfig = true, ConfigFolder = "ProGamerGui"})
+local Window = OrionLib:MakeWindow({IntroText = "ProGamerGui",Name = "ProGamerGui - Doors", HidePremium = false, SaveConfig = true, ConfigFolder = "ProGamerGuiDoors"})
 if game.PlaceId == 6516141723 then
     OrionLib:MakeNotification({
         Name = "Error",
