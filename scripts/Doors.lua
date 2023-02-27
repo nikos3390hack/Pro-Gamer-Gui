@@ -166,7 +166,13 @@ local BookCoroutine = coroutine.create(function()
     end
 end)
 local EntityCoroutine = coroutine.create(function()
-    local Entity = game:GetService("Workspace").CurrentRooms["50"].FigureSetup:WaitForChild("FigureRagdoll",5) or game:GetService("Workspace").CurrentRooms["100"].FigureSetup:WaitForChild("FigureRagdoll",5)
+    local Entity
+    if game:GetService("Workspace").CurrentRooms["50"].FigureSetup:WaitForChild("FigureRagdoll",5) then
+        local Entity = game:GetService("Workspace").CurrentRooms["50"].FigureSetup:WaitForChild("FigureRagdoll",5)
+    end
+    if game:GetService("Workspace").CurrentRooms["100"].FigureSetup:WaitForChild("FigureRagdoll",5) then
+        local Entity = game:GetService("Workspace").CurrentRooms["100"].FigureSetup:WaitForChild("FigureRagdoll",5)
+    end
     Entity:WaitForChild("Torso",2.5)
     table.insert(FigureChams,ApplyEntityChams(Entity))
 end)
@@ -393,8 +399,7 @@ EntitiessTab:AddButton({
 	Name = "Spawn Timothy",
 	Callback = function()
         local a = game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game
-        require(a.RemoteListener.Modules.SpiderJumpscare)(require(a), workspace.CurrentRooms["0"].Assets.Dresser.DrawerContainer, 0.2)
-
+        require(a.RemoteListener.Modules.SpiderJumpscare)(require(a), workspace.CurrentRooms[tostring(LatestRoom)].Assets.Dresser.DrawerContainer, 0.2)
   	end    
 })
 
@@ -442,7 +447,11 @@ end))
 
 workspace.CurrentCamera.ChildAdded:Connect(function(child)
     if child.Name == "Screech" and OrionLib.Flags["ScreechToggle"].Value == false then
-
+        OrionLib:MakeNotification({
+            Name = "Warning!",
+            Content = "Screech has spawned, find him",
+            Time = 5
+        })
     end
     if child.Name == "Screech" and OrionLib.Flags["ScreechToggle"].Value == true then
         child:Destroy()
@@ -531,7 +540,7 @@ CreditsTab:AddParagraph("Credits to","nikos")
 CreditsTab:AddButton({
 	Name = "Destroy UI",
 	Callback = function()
-        	OrionLib:Destroy()
+        OrionLib:Destroy()
   	end    
 })
 
@@ -539,8 +548,6 @@ coroutine.resume(NotificationCoroutine)
 
 OrionLib:Init()
 --// ok actual code ends here
-
-CreditsTab:AddParagraph("Credits to","nikos")
 
 coroutine.resume(NotificationCoroutine)
 
