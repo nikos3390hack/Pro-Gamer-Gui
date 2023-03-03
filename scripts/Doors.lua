@@ -166,13 +166,7 @@ local BookCoroutine = coroutine.create(function()
     end
 end)
 local EntityCoroutine = coroutine.create(function()
-    local Entity
-    if game:GetService("Workspace").CurrentRooms["50"].FigureSetup:WaitForChild("FigureRagdoll",5) then
-        local Entity = game:GetService("Workspace").CurrentRooms["50"].FigureSetup:WaitForChild("FigureRagdoll",5)
-    end
-    if game:GetService("Workspace").CurrentRooms["100"].FigureSetup:WaitForChild("FigureRagdoll",5) then
-        local Entity = game:GetService("Workspace").CurrentRooms["100"].FigureSetup:WaitForChild("FigureRagdoll",5)
-    end
+    local Entity = game:GetService("Workspace").CurrentRooms["50"].FigureSetup:FindFirstChild("FigureRagdoll",5)
     Entity:WaitForChild("Torso",2.5)
     table.insert(FigureChams,ApplyEntityChams(Entity))
 end)
@@ -356,7 +350,7 @@ GameTab:AddToggle({
 GameTab:AddButton({
 	Name = "Complete breaker box minigame",
 	Callback = function()
-        game:GetService("ReplicatedStorage").Bricks.EBF:FireServer()
+        
   	end    
 })
 GameTab:AddButton({
@@ -399,7 +393,7 @@ EntitiessTab:AddButton({
 	Name = "Spawn Timothy",
 	Callback = function()
         local a = game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game
-        require(a.RemoteListener.Modules.SpiderJumpscare)(require(a), workspace.CurrentRooms[tostring(LatestRoom)].Assets.Dresser.DrawerContainer, 0.2)
+        require(a.RemoteListener.Modules.SpiderJumpscare)(require(a), workspace.CurrentRooms[game.Players.LocalPlayer:GetAttribute("CurrentRoom")].Assets.Dresser.DrawerContainer, 0.2)
   	end    
 })
 
@@ -554,3 +548,4 @@ coroutine.resume(NotificationCoroutine)
 OrionLib:Init()
 
 task.wait(2)
+
