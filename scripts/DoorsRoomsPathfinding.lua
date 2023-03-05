@@ -57,7 +57,7 @@ Folder.Parent = workspace
 Folder.Name = "PathFindPartsFolder"
 
 if LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game.RemoteListener.Modules:FindFirstChild("A90") then
-    LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game.RemoteListener.Modules.A90.Name = "lol" -- Fuck you A90
+    LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game.RemoteListener.Modules.A90.Name = "A90 has left the game"
 end
 
 function getLocker()
@@ -67,7 +67,7 @@ function getLocker()
         if v.Name == "Rooms_Locker" then
             if v:FindFirstChild("Door") and v:FindFirstChild("HiddenPlayer") then
                 if v.HiddenPlayer.Value == nil then
-                    if v.Door.Position.Y > -3 then -- Prevents going to the lower lockers in the room with the bridge 
+                    if v.Door.Position.Y > -3 then
                         if Closest == nil then
                             Closest = v.Door
                         else
