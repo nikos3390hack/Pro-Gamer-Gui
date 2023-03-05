@@ -128,12 +128,9 @@ local BookCoroutine = coroutine.create(function()
     end
 end)
 local EntityCoroutine = coroutine.create(function()
-    local Entity = game:GetService("Workspace").CurrentRooms:FindFirstChild("50").FigureSetup:FindFirstChild("FigureRagdoll",5)
-    local Entity2 = game:GetService("Workspace").CurrentRooms:FindFirstChild("100").FigureSetup:FindFirstChild("FigureRagdoll",5)
+    local Entity = game:GetService("Workspace").CurrentRooms["50"].FigureSetup:FindFirstChild("FigureRagdoll",5)
     Entity:WaitForChild("Torso",2.5)
     table.insert(FigureChams,ApplyEntityChams(Entity))
-    Entity2:WaitForChild("Torso",2.5)
-    table.insert(FigureChams,ApplyEntityChams(Entity2))
 end)
 
 
@@ -180,8 +177,8 @@ CharTab:AddToggle({
 CharTab:AddButton({
 	Name = "Complete The Rooms (Takes a long of time)",
 	Callback = function()
-
-    end 
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/nikos3390hack/Pro-Gamer-Gui/main/scripts/DoorsRoomsPathfinding.lua"))()
+   end 
 })
 
 GameTab:AddToggle({
