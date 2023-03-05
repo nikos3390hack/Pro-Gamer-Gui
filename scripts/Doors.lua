@@ -1,47 +1,3 @@
-local changeswitch
-local fake = {Disconnect = function()end}
-local index;index = hookmetamethod(game.Changed,"__index",function(self,key)
-    if tostring(self) == "Signal InputBegan" then
-        return function(a,e)
-            local f = select(2,pcall(debug.getupvalue,e,2))
-            if f and type(f) == "function" then
-                if debug.getconstant(f,1) == 99999 then
-                    local side = debug.getupvalue(f,3)
-                    local timestamp = debug.getupvalue(f,4)
-                    task.delay(math.abs(tick()-timestamp),f,side)
-                    return fake
-                elseif debug.getconstant(f,2) == "GetAttribute" then
-                    changeswitch = f
-                    return fake
-                end
-            end
-            return index(self,key)(a,e)
-        end
-    end
-    return index(self,key)
-end)
-local function getswitch(id)
-    for i,v in pairs(workspace.CurrentRooms['100'].ElevatorBreaker:GetChildren()) do
-        if v.Name == "BreakerSwitch" and v:GetAttribute("ID") == id then
-            return v
-        end
-    end
-end
-local newindex;newindex = hookmetamethod(game,"__newindex",function(self,key,new)
-    if self.Name == "Code" and key == "Text" then
-        if tonumber(new) then
-            coroutine.wrap(function()
-                local switch = getswitch(tonumber(new))
-                task.wait()
-                if self.Frame.BackgroundTransparency == 0 then
-                    changeswitch(switch)
-                end
-            end)()
-        end
-    end
-    return newindex(self,key,new)
-end)
-
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 local Window = OrionLib:MakeWindow({IntroText = "ProGamerGui",Name = "ProGamerGui - Doors", HidePremium = false, SaveConfig = true, ConfigFolder = "ProGamerGuiDoors"})
 if game.PlaceId == 6516141723 then
@@ -89,13 +45,19 @@ end
 
 local KeyCoroutine = coroutine.create(function()
     workspace.CurrentRooms.DescendantAdded:Connect(function(inst)
-        if inst.Name == "KeyObtain" or inst.Name == "LeverForGate" then
+        if inst.Name == "KeyObtain" then
+            table.insert(KeyChams,ApplyKeyChams(inst))
+        end
+        if inst.Name == "LeverForGate" then
             table.insert(KeyChams,ApplyKeyChams(inst))
         end
     end)
 end)
 for i,v in ipairs(workspace:GetDescendants()) do
-    if v.Name == "KeyObtain" or v.Name == "LeverForGate" then
+    if v.Name == "KeyObtain" then
+        table.insert(KeyChams,ApplyKeyChams(v))
+    end
+    if v.Name == "LeverForGate" then
         table.insert(KeyChams,ApplyKeyChams(v))
     end
 end
@@ -166,9 +128,12 @@ local BookCoroutine = coroutine.create(function()
     end
 end)
 local EntityCoroutine = coroutine.create(function()
-    local Entity = game:GetService("Workspace").CurrentRooms["50"].FigureSetup:FindFirstChild("FigureRagdoll",5)
+    local Entity = game:GetService("Workspace").CurrentRooms:FindFirstChild("50").FigureSetup:FindFirstChild("FigureRagdoll",5)
+    local Entity2 = game:GetService("Workspace").CurrentRooms:FindFirstChild("100").FigureSetup:FindFirstChild("FigureRagdoll",5)
     Entity:WaitForChild("Torso",2.5)
     table.insert(FigureChams,ApplyEntityChams(Entity))
+    Entity2:WaitForChild("Torso",2.5)
+    table.insert(FigureChams,ApplyEntityChams(Entity2))
 end)
 
 
@@ -177,9 +142,6 @@ local GameTab = Window:MakeTab({
 	Icon = "rbxassetid://4483345998",
 	PremiumOnly = false
 })
-
-local FloorIndicator = GameTab:AddLabel("0")
-
 local CharTab = Window:MakeTab({
 	Name = "Character",
 	Icon = "rbxassetid://4483345998",
@@ -191,7 +153,7 @@ CharTab:AddSlider({
 	Name = "Speed",
 	Min = 0,
 	Max = 50,
-	Default = 0,
+	Default = 5,
 	Color = Color3.fromRGB(255,255,255),
 	Increment = 1,
 	Callback = function(Value)
@@ -213,6 +175,13 @@ CharTab:AddToggle({
     Callback = function(Value)
         pcl.Enabled = Value
     end
+})
+
+CharTab:AddButton({
+	Name = "Complete The Rooms (Takes a long of time)",
+	Callback = function()
+
+    end 
 })
 
 GameTab:AddToggle({
@@ -241,17 +210,17 @@ GameTab:AddButton({
             end
             if HasKey then
                 game.Players.LocalPlayer.Character:PivotTo(CF(HasKey.Hitbox.Position))
-                wait()
+                wait(0.3)
                 fireproximityprompt(HasKey.ModulePrompt,0)
                 game.Players.LocalPlayer.Character:PivotTo(CF(CurrentDoor.Door.Position))
-                wait()
+                wait(0.3)
                 fireproximityprompt(CurrentDoor.Lock.UnlockPrompt,0)
             end
             if LatestRoom == 50 then
                 CurrentDoor = workspace.CurrentRooms[tostring(LatestRoom+1)]:WaitForChild("Door")
             end
             game.Players.LocalPlayer.Character:PivotTo(CF(CurrentDoor.Door.Position))
-            wait()
+            wait(0.3)
             CurrentDoor.ClientOpen:FireServer()
         end)
   	end    
@@ -279,28 +248,18 @@ local AutoSkipCoro = coroutine.create(function()
                 end
                 if HasKey then
                     game.Players.LocalPlayer.Character:PivotTo(CF(HasKey.Hitbox.Position))
-                    task.wait()
+                    task.wait(0.3)
                     fireproximityprompt(HasKey.ModulePrompt,0)
                     game.Players.LocalPlayer.Character:PivotTo(CF(CurrentDoor.Door.Position))
-                    task.wait()
+                    task.wait(0.3)
                     fireproximityprompt(CurrentDoor.Lock.UnlockPrompt,0)
                 end
                 if LatestRoom == 50 then
                     CurrentDoor = workspace.CurrentRooms[tostring(LatestRoom+1)]:WaitForChild("Door")
                 end
                 game.Players.LocalPlayer.Character:PivotTo(CF(CurrentDoor.Door.Position))
-                task.wait()
+                task.wait(0.3)
                 CurrentDoor.ClientOpen:FireServer()
-            elseif OrionLib.Flags["AutoSkip"].Value == true and game:GetService("ReplicatedStorage").GameData.LatestRoom.Value == 100 then
-                local LatestRoom =  workspace.CurrentRooms[tostring(game:GetService("ReplicatedStorage").GameData.LatestRoom.Value)]
-                local ElevatorCar = LatestRoom:WaitForChild("ElevatorCar")
-                local ElevatorBreaker = LatestRoom:WaitForChild("ElevatorBreaker")
-                task.wait(0.2)
-                game.Players.LocalPlayer.Character:PivotTo(CF(ElevatorBreaker.Box.Position))
-                task.wait(0.2)
-                game:GetService("ReplicatedStorage").Bricks.EBF:FireServer()
-                task.wait(0.2)
-                game.Players.LocalPlayer.Character:PivotTo(CF(ElevatorCar.CollisionFloor.Position + Vector3.new(0,2,0)))
             end
         end)
         end
@@ -342,7 +301,7 @@ GameTab:AddToggle({
     Save = true
 })
 GameTab:AddToggle({
-	Name = "Entity Notification",
+	Name = "Notify when mob spawns",
 	Default = false,
     Flag = "MobToggle" ,
     Save = true
@@ -350,7 +309,7 @@ GameTab:AddToggle({
 GameTab:AddButton({
 	Name = "Complete breaker box minigame",
 	Callback = function()
-        
+        game:GetService("ReplicatedStorage").Bricks.EBF:FireServer()
   	end    
 })
 GameTab:AddButton({
@@ -440,10 +399,10 @@ old = hookmetamethod(game,"__namecall",newcclosure(function(self,...)
 end))
 
 workspace.CurrentCamera.ChildAdded:Connect(function(child)
-    if child.Name == "Screech" and OrionLib.Flags["ScreechToggle"].Value == false then
+    if child.Name == "Screech" and OrionLib.Flags["ScreechToggle"].Value == false and OrionLib.Flags["MobToggle"].Value == true then
         OrionLib:MakeNotification({
             Name = "Warning!",
-            Content = "Screech has spawned, find him",
+            Content = "Screech has spawned ,find him!",
             Time = 5
         })
     end
@@ -454,7 +413,6 @@ end)
 
 local NotificationCoroutine = coroutine.create(function()
     LatestRoom.Changed:Connect(function()
-        FloorIndicator:Set(tostring(LatestRoom.Value))
         if OrionLib.Flags["PredictToggle"].Value == true then
             local n = ChaseStart.Value - LatestRoom.Value
             if 0 < n and n < 4 then
@@ -468,6 +426,17 @@ local NotificationCoroutine = coroutine.create(function()
         if OrionLib.Flags["BookToggle"].Value == true then
             if LatestRoom.Value == 50 then
                 coroutine.resume(BookCoroutine)
+            end
+            if LatestRoom.Value == 100 then
+                coroutine.resume(BookCoroutine)
+            end
+        end
+        if OrionLib.Flags["FigureToggle"].Value == true then
+            if LatestRoom.Value == 50 then
+                coroutine.resume(EntityCoroutine)
+            end
+            if LatestRoom.Value == 100 then
+                coroutine.resume(EntityCoroutine)
             end
         end
     end)
@@ -530,22 +499,10 @@ local CreditsTab = Window:MakeTab({
 	PremiumOnly = false
 })
 
-CreditsTab:AddParagraph("Credits to","nikos")
-CreditsTab:AddButton({
-	Name = "Destroy UI",
-	Callback = function()
-        OrionLib:Destroy()
-  	end    
-})
-
-coroutine.resume(NotificationCoroutine)
-
-OrionLib:Init()
---// ok actual code ends here
+CreditsTab:AddParagraph("Credits to","OminousVibes - (Got most of the ideas from their thread, check it out! - https://v3rmillion.net/showthread.php?tid=1184088)")
 
 coroutine.resume(NotificationCoroutine)
 
 OrionLib:Init()
 
 task.wait(2)
-
