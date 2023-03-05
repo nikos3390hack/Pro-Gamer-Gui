@@ -1,5 +1,8 @@
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 local Window = OrionLib:MakeWindow({IntroText = "ProGamerGui",Name = "ProGamerGui - Doors", HidePremium = false, SaveConfig = true, ConfigFolder = "ProGamerGuiDoors"})
+local plr = game.Players.LocalPlayer
+local char = plr.Character or plr.CharacterAdded:Wait()
+
 if game.PlaceId == 6516141723 then
     OrionLib:MakeNotification({
         Name = "Error",
@@ -150,7 +153,7 @@ CharTab:AddSlider({
 	Name = "Speed",
 	Min = 0,
 	Max = 50,
-	Default = 5,
+	Default = 0,
 	Color = Color3.fromRGB(255,255,255),
 	Increment = 1,
 	Callback = function(Value)
@@ -158,16 +161,15 @@ CharTab:AddSlider({
 	end    
 })
 
-local pcl = Instance.new("SpotLight")
-pcl.Brightness = 1
-pcl.Face = Enum.NormalId.Front
-pcl.Range = 90
-pcl.Parent = game.Players.LocalPlayer.Character.Head
+local pcl = Instance.new("PointLight")
+pcl.Range = 10000
+pcl.Brightness = 2
+pcl.Parent = char.PrimaryPart
 pcl.Enabled = false
 
 
 CharTab:AddToggle({
-	Name = "Headlight",
+	Name = "Client Glow",
 	Default = false,
     Callback = function(Value)
         pcl.Enabled = Value
@@ -348,8 +350,12 @@ EntitiessTab:AddButton({
 EntitiessTab:AddButton({
 	Name = "Spawn Timothy",
 	Callback = function()
-        local a = game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game
-        require(a.RemoteListener.Modules.SpiderJumpscare)(require(a), workspace.CurrentRooms[game.Players.LocalPlayer:GetAttribute("CurrentRoom")].Assets.Dresser.DrawerContainer, 0.2)
+        for i,v in ipairs(workspace.CurrentRooms:GetDescendants()) do
+            if v.Name == "Dresser" then
+                local a = game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game
+                require(a.RemoteListener.Modules.SpiderJumpscare)(require(a), workspace.CurrentRooms[v].Assets.Dresser.DrawerContainer, 0.2)
+            end
+        end
   	end    
 })
 
@@ -496,7 +502,8 @@ local CreditsTab = Window:MakeTab({
 	PremiumOnly = false
 })
 
-CreditsTab:AddParagraph("Credits to","OminousVibes - (Got most of the ideas from their thread, check it out! - https://v3rmillion.net/showthread.php?tid=1184088)")
+CreditsTab:AddParagraph("Credits to","nikos#9376")
+
 
 coroutine.resume(NotificationCoroutine)
 
