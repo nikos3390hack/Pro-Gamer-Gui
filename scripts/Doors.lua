@@ -68,7 +68,7 @@ coroutine.resume(KeyCoroutine)
 
 local BookChams = {}
 VisualsTab:AddToggle({
-	Name = "Book Chams",
+	Name = "Book/Breaker Pole Chams",
 	Default = false,
     Flag = "BookToggle",
     Save = true,
@@ -124,14 +124,19 @@ end
 
 local BookCoroutine = coroutine.create(function()
     task.wait(1)
-    for i,v in pairs(game:GetService("Workspace").CurrentRooms["50"].Assets:GetDescendants()) do
-        if v.Name == "LiveHintBook" then
+    for i,v in pairs(game:GetService("Workspace").CurrentRooms:GetDescendants()) do
+        if v.Name == "LiveHintBook" or "LiveBreakerPolePickUp" then
             table.insert(BookChams,ApplyBookChams(v))
         end
     end
 end)
 local EntityCoroutine = coroutine.create(function()
-    local Entity = game:GetService("Workspace").CurrentRooms["50"].FigureSetup:FindFirstChild("FigureRagdoll",5)
+    if game:GetService("ReplicatedStorage").GameData.LatestRoom.Value == 50 then
+        local Entity = game:GetService("Workspace").CurrentRooms["50"].FigureSetup:FindFirstChild("FigureRagdoll",5)
+    end
+    if game:GetService("ReplicatedStorage").GameData.LatestRoom.Value == 100 then
+        local Entity = game:GetService("Workspace").CurrentRooms["100"].FigureSetup:FindFirstChild("FigureRagdoll",5)
+    end
     Entity:WaitForChild("Torso",2.5)
     table.insert(FigureChams,ApplyEntityChams(Entity))
 end)
