@@ -125,7 +125,10 @@ end
 local BookCoroutine = coroutine.create(function()
     task.wait(1)
     for i,v in pairs(game:GetService("Workspace").CurrentRooms:GetDescendants()) do
-        if v.Name == "LiveHintBook" or "LiveBreakerPolePickUp" then
+        if v.Name == "LiveHintBook" then
+            table.insert(BookChams,ApplyBookChams(v))
+        end
+	if v.Name == "LiveBreakerPolePickUp" then
             table.insert(BookChams,ApplyBookChams(v))
         end
     end
