@@ -452,7 +452,7 @@ local NotificationCoroutine = coroutine.create(function()
         end
     end)
     workspace.ChildAdded:Connect(function(inst)
-        if inst.Name == "RushMoving" and OrionLib.Flags["MobToggle"].Value == true then
+        if inst.Name == "RushMoving" and OrionLib.Flags["MobToggle"].Value == true and game.ReplicatedStorage.GameData.Floor.Value ~= "Rooms" then
             if OrionLib.Flags["AvoidRushToggle"].Value == true then
                 OrionLib:MakeNotification({
                     Name = "Warning!",
@@ -475,7 +475,7 @@ local NotificationCoroutine = coroutine.create(function()
                     Time = 5
                 })
             end
-        elseif inst.Name == "AmbushMoving" and OrionLib.Flags["MobToggle"].Value == true then
+        elseif inst.Name == "AmbushMoving" and OrionLib.Flags["MobToggle"].Value == true and game.ReplicatedStorage.GameData.Floor.Value ~= "Rooms" then
             if OrionLib.Flags["AvoidRushToggle"].Value == true then
                 OrionLib:MakeNotification({
                     Name = "Warning!",
@@ -498,6 +498,19 @@ local NotificationCoroutine = coroutine.create(function()
                     Time = 5
                 })
             end
+        end
+        if inst.Name == "A60" and OrionLib.Flags["MobToggle"].Value == true and game.ReplicatedStorage.GameData.Floor.Value == "Rooms" then
+            OrionLib:MakeNotification({
+                Name = "Warning!",
+                Content = "A60 has spawned ,hide!",
+                Time = 5
+            })
+        elseif inst.Name == "A120" and OrionLib.Flags["MobToggle"].Value == true and game.ReplicatedStorage.GameData.Floor.Value == "Rooms" then
+            OrionLib:MakeNotification({
+                Name = "Warning!",
+                Content = "A120 has spawned ,hide!",
+                Time = 5
+            })
         end
     end)
 end)
