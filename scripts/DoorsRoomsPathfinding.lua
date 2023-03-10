@@ -7,9 +7,6 @@ if game.PlaceId ~= 6839171747 or game.ReplicatedStorage.GameData.Floor.Value ~= 
 	Sound.Volume = 5
 	Sound.PlayOnRemove = true
 	Sound:Destroy()
-	
-	return
-elseif workspace:FindFirstChild("PathFindPartsFolder") then
 	game.StarterGui:SetCore("SendNotification", { Title = "Warning"; Text = "If you are having issues and the bot is broken, please contact me! geodude#2619" })
 	
 	local Sound = Instance.new("Sound")
@@ -122,7 +119,7 @@ game:GetService("RunService").RenderStepped:connect(function()
     LocalPlayer.Character.Collision.CanCollide = false
     LocalPlayer.Character.Collision.Size = Vector3.new(8,LocalPlayer.Character.Collision.Size.Y,8)
 
-    LocalPlayer.Character.Humanoid.WalkSpeed = 100
+    LocalPlayer.Character.Humanoid.WalkSpeed = 21
 
     local Path = getPath()
     
